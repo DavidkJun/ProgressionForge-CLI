@@ -4,9 +4,9 @@
     // File Layout
      "rootDir": "./src",
      "outDir": "./dist",
-
     // Environment Settings
     "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "esnext",
     "lib": ["esnext"],
     "types": ["node"],
