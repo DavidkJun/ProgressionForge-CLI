@@ -30,7 +30,7 @@ export const loadPlan = async (planName: string): Promise<PlanRecipe> => {
     );
     if (!validationResult.success) {
       throw new Error(
-        `Plan file "${planName}" is corrupted or has invalid format.`
+        `Plan file "${planName}.json" is corrupted or has invalid format.`
       );
     }
     return validationResult.data;
