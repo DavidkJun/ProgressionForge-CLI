@@ -22,18 +22,11 @@ export const savePlan = async (
 };
 
 export const loadPlan = async (planName: string): Promise<PlanRecipe> => {
+  const filePath = path.join(STORAGE_PATH, `${planName}.json`);
+  let fileContent;
   try {
-    const filePath = path.join(STORAGE_PATH, `${planName}.json`);
     const fileBuffer = await fs.promises.readFile(filePath);
-    const validationResult = recipePlanSchema.safeParse(
-      JSON.parse(fileBuffer.toString('utf-8'))
-    );
-    if (!validationResult.success) {
-      throw new Error(
-        `Plan file "${planName}.json" is corrupted or has invalid format.`
-      );
-    }
-    return validationResult.data;
+    fileContent = JSON.parse(fileBuffer.toString('utf-8'));
   } catch (error: unknown) {
     if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
       throw new Error(`Plan with name "${planName}" does not exist.`);
@@ -41,6 +34,13 @@ export const loadPlan = async (planName: string): Promise<PlanRecipe> => {
     console.error(`Failed to load plan "${planName}":`, error);
     throw new Error(`Failed to load or parse plan "${planName}".`);
   }
+  const validationResult = recipePlanSchema.safeParse(fileContent);
+  if (!validationResult.success) {
+    throw new Error(
+      `Plan file "${planName}.json" is corrupted or has invalid format.`
+    );
+  }
+  return validationResult.data;
 };
 
 export const listPlans = async (): Promise<string[]> => {
