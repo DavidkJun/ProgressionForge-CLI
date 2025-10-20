@@ -1,4 +1,4 @@
-export const linearProgression = (params: LinearParams) => {
+export const linearProgression = (params: LinearParams): number[] => {
   const weeklyWeights = [];
   let currentWeight = params.initialWeight;
   for (let i = 0; i < params.durationWeeks; i++) {
