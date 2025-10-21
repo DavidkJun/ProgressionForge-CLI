@@ -5,17 +5,21 @@ describe('linearProgression', () => {
     const data: LinearParams = {
       initialWeight: 100,
       durationWeeks: 4,
-      incrementKg: 2.5,
+      progressionParams: {
+        incrementCoefficient: 0.025,
+      },
     };
     const expectedResult = [100, 102.5, 105, 107.5];
     expect(linearProgression(data)).toEqual(expectedResult);
   });
 
-  it('should return an array of identical weights if increment is zero', () => {
+  it('should return an array of identical weights if increment coefficient is zero', () => {
     const data: LinearParams = {
       initialWeight: 100,
       durationWeeks: 4,
-      incrementKg: 0,
+      progressionParams: {
+        incrementCoefficient: 0,
+      },
     };
     const expectedResult = [100, 100, 100, 100];
     expect(linearProgression(data)).toEqual(expectedResult);
@@ -25,7 +29,9 @@ describe('linearProgression', () => {
     const data: LinearParams = {
       initialWeight: 120,
       durationWeeks: 1,
-      incrementKg: 5,
+      progressionParams: {
+        incrementCoefficient: 0.05,
+      },
     };
     const expectedResult = [120];
     expect(linearProgression(data)).toEqual(expectedResult);
@@ -35,7 +41,9 @@ describe('linearProgression', () => {
     const data: LinearParams = {
       initialWeight: 100,
       durationWeeks: 3,
-      incrementKg: -5,
+      progressionParams: {
+        incrementCoefficient: -0.05,
+      },
     };
     const expectedResult = [100, 95, 90];
     expect(linearProgression(data)).toEqual(expectedResult);
