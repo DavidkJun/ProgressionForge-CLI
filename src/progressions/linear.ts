@@ -1,9 +1,12 @@
 export const linearProgression = (params: LinearParams): number[] => {
+  const { initialWeight, durationWeeks, progressionParams } = params;
+  const { incrementCoefficient } = progressionParams;
   const weeklyWeights = [];
   let currentWeight = params.initialWeight;
-  for (let i = 0; i < params.durationWeeks; i++) {
+  const incrementKg = initialWeight * incrementCoefficient;
+  for (let i = 0; i < durationWeeks; i++) {
     weeklyWeights.push(currentWeight);
-    currentWeight += params.incrementKg;
+    currentWeight += incrementKg;
   }
   return weeklyWeights;
 };
@@ -11,5 +14,9 @@ export const linearProgression = (params: LinearParams): number[] => {
 export interface LinearParams {
   initialWeight: number;
   durationWeeks: number;
-  incrementKg: number;
+  progressionParams: LinearProgressionParams;
+}
+
+export interface LinearProgressionParams {
+  incrementCoefficient: number;
 }
