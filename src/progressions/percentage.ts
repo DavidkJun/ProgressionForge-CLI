@@ -1,3 +1,5 @@
+import { roundToNearest } from '../utils/math.js';
+
 interface PercentageProgressionParams {
   startPercent: number;
   incrementPercent: number;
@@ -8,10 +10,6 @@ export interface PercentageParams {
   durationWeeks: number;
   progressionParams: PercentageProgressionParams;
 }
-
-const roundToNearest = (value: number, step: number): number => {
-  return Math.round(value / step) * step;
-};
 
 export const percentageProgression = (params: PercentageParams): number[] => {
   const { initialWeight, durationWeeks, progressionParams } = params;
