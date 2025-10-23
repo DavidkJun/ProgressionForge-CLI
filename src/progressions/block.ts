@@ -6,13 +6,13 @@ export interface BlockProgressionParams {
   blockWeeks: number;
 }
 
-export interface blockParams {
+export interface BlockParams {
   initialWeight: number;
   durationWeeks: number;
   progressionParams: BlockProgressionParams;
 }
 
-export const blockProgression = (params: blockParams): number[] => {
+export const blockProgression = (params: BlockParams): number[] => {
   const { initialWeight, durationWeeks, progressionParams } = params;
   const { accumulationCoefficient, intensificationCoefficient, blockWeeks } =
     progressionParams;
