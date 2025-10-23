@@ -16,7 +16,7 @@ export const exerciseSchema = z.object({
 
 export const recipePlanSchema = z.object({
   planName: z.string(),
-  durationWeeks: z.number(),
+  durationWeeks: z.number().positive(),
   bodyWeightKg: z.number(),
   exercises: z.array(exerciseSchema),
 });
