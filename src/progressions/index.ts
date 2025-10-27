@@ -7,6 +7,11 @@ import type { PercentageParams } from './percentage.js';
 import type { WaveParams } from './wave.js';
 import type { BlockParams } from './block.js';
 
+export type { LinearParams } from './linear.js';
+export type { PercentageParams } from './percentage.js';
+export type { WaveParams } from './wave.js';
+export type { BlockParams } from './block.js';
+
 export const progressionRegistry = {
   linear: linearProgression,
   percentage: percentageProgression,

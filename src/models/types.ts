@@ -1,15 +1,4 @@
-import type {
-  LinearParams,
-  PercentageParams,
-  WaveParams,
-  BlockParams,
-} from '../progressions/index.js';
-
-export type ProgressionParams =
-  | LinearParams
-  | PercentageParams
-  | WaveParams
-  | BlockParams;
+import { ProgressionParams } from '../progressions/index.js';
 
 export type WarmupStep =
   | { exercise: string; duration?: string; sets?: number; reps?: number }
