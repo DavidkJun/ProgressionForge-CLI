@@ -1,6 +1,6 @@
 import { roundToNearest } from '../utils/math.js';
 
-interface PercentageProgressionParams {
+export interface PercentageProgressionParams {
   startPercent: number;
   incrementPercent: number;
 }

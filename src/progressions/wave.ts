@@ -1,6 +1,6 @@
 import { roundToNearest } from '../utils/math.js';
 
-export interface waveProgressionParams {
+export interface WaveProgressionParams {
   weeksUp: number;
   upCoefficient: number;
   downCoefficient: number;
@@ -9,7 +9,7 @@ export interface waveProgressionParams {
 export interface WaveParams {
   initialWeight: number;
   durationWeeks: number;
-  progressionParams: waveProgressionParams;
+  progressionParams: WaveProgressionParams;
 }
 
 export const waveProgression = (params: WaveParams): number[] => {
