@@ -16,8 +16,8 @@ export const savePlan = async (
     const fileContent = JSON.stringify(data, null, 2);
     await fs.promises.writeFile(filePath, fileContent, 'utf-8');
   } catch (error: unknown) {
-    console.error(`Error saving plan "${planName}":`, error);
-    throw new Error(`Failed to save a plan "${planName}".`);
+    console.error(`Error saving plan \"${planName}\":`, error);
+    throw new Error(`Failed to save a plan \"${planName}\".`);
   }
 };
 
@@ -29,18 +29,18 @@ export const loadPlan = async (planName: string): Promise<PlanRecipe> => {
     fileContent = JSON.parse(fileBuffer.toString('utf-8'));
   } catch (error: unknown) {
     if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
-      throw new Error(`Plan with name "${planName}" does not exist.`);
+      throw new Error(`Plan with name \"${planName}\" does not exist.`);
     }
-    console.error(`Failed to load plan "${planName}":`, error);
-    throw new Error(`Failed to load or parse plan "${planName}".`);
+    console.error(`Failed to load plan \"${planName}\":`, error);
+    throw new Error(`Failed to load or parse plan \"${planName}\".`);
   }
   const validationResult = recipePlanSchema.safeParse(fileContent);
   if (!validationResult.success) {
     throw new Error(
-      `Plan file "${planName}.json" is corrupted or has invalid format.`
+      `Plan file \"${planName}.json\" is corrupted or has invalid format.`
     );
   }
-  return validationResult.data;
+  return validationResult.data as unknown as PlanRecipe;
 };
 
 export const listPlans = async (): Promise<string[]> => {
@@ -62,20 +62,25 @@ export const deletePlan = async (planName: string): Promise<void> => {
     await fs.promises.unlink(filePath);
   } catch (error: unknown) {
     if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
-      throw new Error(`Plan with name "${planName}" does not exist.`);
+      throw new Error(`Plan with name \"${planName}\" does not exist.`);
     }
-    console.error(`Failed to delete plan "${planName}":`, error);
+    console.error(`Failed to delete plan \"${planName}\":`, error);
     throw new Error(
-      `An unexpected error occurred while deleting plan "${planName}".`
+      `An unexpected error occurred while deleting plan \"${planName}\".`
     );
   }
 };
 
 export const planExists = async (planName: string): Promise<boolean> => {
+  const filePath = path.join(STORAGE_PATH, `${planName}.json`);
   try {
-    await loadPlan(planName);
+    await fs.promises.access(filePath);
     return true;
-  } catch (_error) {
-    return false;
+  } catch (error: unknown) {
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+      return false;
+    }
+    console.error(`Error checking if plan \"${planName}\" exists:`, error);
+    throw error;
   }
 };
