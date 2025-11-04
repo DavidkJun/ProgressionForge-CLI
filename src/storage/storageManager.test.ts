@@ -20,6 +20,7 @@ const MOCK_PLAN_DATA: PlanRecipe = {
       progressionParams: {
         incrementCoefficient: 0.1,
       },
+      warmup: [{ exercise: 'Arm Circles', duration: '1 min' }],
     },
   ],
 };
