@@ -37,7 +37,7 @@ describe('printPlan (Comprehensive Test)', () => {
               workingSets: { sets: 3, reps: 5, weightKg: 100 },
               warmup: [
                 { weightKg: 50, reps: 5 },
-                { exercise: 'Rotator Cuffs', duration: '1 min' },
+                { exercise: 'Rotator Cuffs' },
               ],
             },
           ],
@@ -72,7 +72,7 @@ describe('printPlan (Comprehensive Test)', () => {
       '\n--- Week 1 ---',
       '  **Bench Press (3 x 5 @ 100 kg)**',
       '    Warmup: 50 kg x 5 reps',
-      '    Warmup: Rotator Cuffs (1 min)',
+      '    Warmup: Rotator Cuffs ',
       '\n--- Week 2 ---',
       '  **Squat (5 x 5 @ 120 kg)**',
       '    Warmup: Goblet Squat 2 sets x 8 reps',

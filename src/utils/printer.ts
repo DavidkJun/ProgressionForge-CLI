@@ -8,7 +8,6 @@ const formatWarmupStep = (step: WarmupStep): string => {
   let details = '';
   if (step.sets) details += `${step.sets} sets `;
   if (step.reps) details += `x ${step.reps} reps `;
-  if (step.duration) details += `(${step.duration})`;
 
   return `${step.exercise} ${details.trim()}`;
 };
