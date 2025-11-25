@@ -2,9 +2,11 @@ import mock from 'mock-fs';
 import * as storageManager from './storageManager.js';
 import { PlanRecipe } from '../models/types.js';
 import path from 'path';
-import os from 'os';
 
-const MOCK_PLAN_NAME = 'MyTestPlan';
+const CWD = process.cwd();
+const PLANS_DIR = path.join(CWD, 'plans');
+
+const MOCK_PLAN_NAME = 'TestPlan';
 const MOCK_PLAN_DATA: PlanRecipe = {
   planName: MOCK_PLAN_NAME,
   durationWeeks: 4,
@@ -20,106 +22,146 @@ const MOCK_PLAN_DATA: PlanRecipe = {
       progressionParams: {
         incrementCoefficient: 0.1,
       },
-      warmup: [{ exercise: 'Arm Circles', duration: '1 min' }],
+      warmup: [{ exercise: 'Arm Circles', reps: 10 }],
     },
   ],
 };
 
-describe('storageManager', () => {
+describe('storageManager (Integration Tests)', () => {
+  beforeEach(() => {
+    mock({
+      node_modules: mock.load(path.resolve(CWD, 'node_modules')),
+      [PLANS_DIR]: {},
+    });
+  });
+
   afterEach(() => {
     mock.restore();
   });
 
-  it('should save and then load a plan correctly', async () => {
-    mock({});
-    await storageManager.savePlan(MOCK_PLAN_NAME, MOCK_PLAN_DATA);
+  describe('savePlan & loadPlan', () => {
+    it('should save a plan to the correct directory and load it back', async () => {
+      await storageManager.savePlan(MOCK_PLAN_NAME, MOCK_PLAN_DATA);
 
-    const loadedPlan = await storageManager.loadPlan(MOCK_PLAN_NAME);
-
-    expect(loadedPlan).toEqual(MOCK_PLAN_DATA);
-  });
-  it('should return error that file doesnt exist', async () => {
-    mock({});
-    await expect(storageManager.loadPlan('non_existent_plan')).rejects.toThrow(
-      `Plan with name "non_existent_plan" does not exist.`
-    );
-  });
-  it('should return error that file is corrupted', async () => {
-    const corruptedPlanPath = path.join(
-      os.homedir(),
-      '.progression-forge',
-      'plans'
-    );
-    const corruptedPlanName = 'corrupted_plan';
-    const invalidJson = '{"planName": "test", "durationWeeks": 4,}';
-
-    mock({
-      [corruptedPlanPath]: {
-        [`${corruptedPlanName}.json`]: invalidJson,
-      },
-      node_modules: mock.load(path.resolve(process.cwd(), 'node_modules')),
-    });
-    await expect(storageManager.loadPlan(corruptedPlanName)).rejects.toThrow(
-      `Failed to load or parse plan "${corruptedPlanName}".`
-    );
-  });
-  it('should throw a validation error for a plan with invalid data structure', async () => {
-    const invalidPlanPath = path.join(
-      os.homedir(),
-      '.progression-forge',
-      'plans'
-    );
-    const invalidPlanName = 'invalid_structure_plan';
-
-    const planWithInvalidData = {
-      planName: invalidPlanName,
-      durationWeeks: 'a string instead of a number',
-      bodyWeightKg: 80,
-      exercises: [],
-    };
-
-    const validJsonString = JSON.stringify(planWithInvalidData);
-
-    mock({
-      [invalidPlanPath]: {
-        [`${invalidPlanName}.json`]: validJsonString,
-      },
-      node_modules: mock.load(path.resolve(process.cwd(), 'node_modules')),
+      const loadedPlan = await storageManager.loadPlan(MOCK_PLAN_NAME);
+      expect(loadedPlan).toEqual(MOCK_PLAN_DATA);
     });
 
-    await expect(storageManager.loadPlan(invalidPlanName)).rejects.toThrow(
-      `Plan file "${invalidPlanName}.json" is corrupted or has invalid format.`
-    );
-  });
-  it('should list plans, delete one, and reflect the change', async () => {
-    const planPath = path.join(os.homedir(), '.progression-forge', 'plans');
-    mock({
-      [planPath]: {
-        'plan-A.json': '{}',
-        'plan-B.json': '{}',
-        'plan-C.json': '{}',
-      },
-      node_modules: mock.load(path.resolve(process.cwd(), 'node_modules')),
+    it('should throw an error if the plan does not exist', async () => {
+      await expect(storageManager.loadPlan('non-existent')).rejects.toThrow(
+        'does not exist'
+      );
     });
 
-    const initialList = await storageManager.listPlans();
-    expect(initialList).toEqual(['plan-A', 'plan-B', 'plan-C']);
+    it('should throw an error if the file is corrupted (invalid JSON)', async () => {
+      mock({
+        node_modules: mock.load(path.resolve(CWD, 'node_modules')),
+        [PLANS_DIR]: {
+          'bad-json.json': '{ "name": "Incomplete JSON"',
+        },
+      });
 
-    await storageManager.deletePlan('plan-B');
+      await expect(storageManager.loadPlan('bad-json')).rejects.toThrow(
+        'Failed to load or parse plan'
+      );
+    });
 
-    const finalList = await storageManager.listPlans();
-    expect(finalList).toEqual(['plan-A', 'plan-C']);
+    it('should throw a validation error if the data structure is invalid', async () => {
+      const invalidData = {
+        planName: 'Invalid',
+        bodyWeightKg: 'wrong type',
+      };
+
+      mock({
+        node_modules: mock.load(path.resolve(CWD, 'node_modules')),
+        [PLANS_DIR]: {
+          'invalid-schema.json': JSON.stringify(invalidData),
+        },
+      });
+
+      await expect(storageManager.loadPlan('invalid-schema')).rejects.toThrow(
+        'is corrupted or has invalid format'
+      );
+    });
   });
 
-  it('should correctly check if a plan exists', async () => {
-    mock({});
+  describe('listPlans', () => {
+    it('should return a list of plan names', async () => {
+      mock({
+        node_modules: mock.load(path.resolve(CWD, 'node_modules')),
+        [PLANS_DIR]: {
+          'PlanA.json': '{}',
+          'PlanB.json': '{}',
+        },
+      });
 
-    const existsBeforeSaving = await storageManager.planExists('my-new-plan');
-    expect(existsBeforeSaving).toBe(false);
+      const list = await storageManager.listPlans();
+      expect(list).toHaveLength(2);
+      expect(list).toContain('PlanA');
+      expect(list).toContain('PlanB');
+    });
 
-    await storageManager.savePlan('my-new-plan', MOCK_PLAN_DATA);
+    it('should ignore non-json files', async () => {
+      mock({
+        node_modules: mock.load(path.resolve(CWD, 'node_modules')),
+        [PLANS_DIR]: {
+          'PlanA.json': '{}',
+          'image.png': 'binary data',
+          '.DS_Store': 'system file',
+          'notes.txt': 'text',
+        },
+      });
 
-    const existsAfterSaving = await storageManager.planExists('my-new-plan');
-    expect(existsAfterSaving).toBe(true);
+      const list = await storageManager.listPlans();
+      expect(list).toEqual(['PlanA']);
+    });
+
+    it('should return an empty array if the plans directory does not exist', async () => {
+      mock({
+        node_modules: mock.load(path.resolve(CWD, 'node_modules')),
+      });
+
+      const list = await storageManager.listPlans();
+      expect(list).toEqual([]);
+    });
+  });
+
+  describe('deletePlan', () => {
+    it('should successfully delete a plan', async () => {
+      mock({
+        node_modules: mock.load(path.resolve(CWD, 'node_modules')),
+        [PLANS_DIR]: {
+          'ToDelete.json': '{}',
+        },
+      });
+
+      await storageManager.deletePlan('ToDelete');
+      const list = await storageManager.listPlans();
+      expect(list).not.toContain('ToDelete');
+    });
+
+    it('should throw an error when trying to delete a non-existent plan', async () => {
+      await expect(storageManager.deletePlan('Ghost')).rejects.toThrow(
+        'does not exist'
+      );
+    });
+  });
+
+  describe('planExists', () => {
+    it('should return true if the plan exists', async () => {
+      mock({
+        node_modules: mock.load(path.resolve(CWD, 'node_modules')),
+        [PLANS_DIR]: {
+          'Exists.json': '{}',
+        },
+      });
+      const result = await storageManager.planExists('Exists');
+      expect(result).toBe(true);
+    });
+
+    it('should return false if the plan does not exist', async () => {
+      const result = await storageManager.planExists('Nope');
+      expect(result).toBe(false);
+    });
   });
 });

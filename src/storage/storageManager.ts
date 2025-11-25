@@ -1,10 +1,14 @@
 import fs from 'fs';
 import path from 'path';
-import os from 'os';
 import { PlanRecipe } from '../models/types.js';
 import { recipePlanSchema } from '../models/schema.js';
 
-const STORAGE_PATH = path.join(os.homedir(), '.progression-forge', 'plans');
+const STORAGE_PATH = path.join(process.cwd(), 'plans');
+
+// Допоміжний тип для помилок файлової системи (NodeJS.ErrnoException)
+interface SystemError extends Error {
+  code?: string;
+}
 
 export const savePlan = async (
   planName: string,
@@ -16,8 +20,8 @@ export const savePlan = async (
     const fileContent = JSON.stringify(data, null, 2);
     await fs.promises.writeFile(filePath, fileContent, 'utf-8');
   } catch (error: unknown) {
-    console.error(`Error saving plan \"${planName}\":`, error);
-    throw new Error(`Failed to save a plan \"${planName}\".`);
+    console.error(`Error saving plan "${planName}":`, error);
+    throw new Error(`Failed to save a plan "${planName}".`);
   }
 };
 
@@ -28,16 +32,18 @@ export const loadPlan = async (planName: string): Promise<PlanRecipe> => {
     const fileBuffer = await fs.promises.readFile(filePath);
     fileContent = JSON.parse(fileBuffer.toString('utf-8'));
   } catch (error: unknown) {
-    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
-      throw new Error(`Plan with name \"${planName}\" does not exist.`);
+    const sysError = error as SystemError;
+    if (sysError.code === 'ENOENT') {
+      throw new Error(`Plan with name "${planName}" does not exist.`);
     }
-    console.error(`Failed to load plan \"${planName}\":`, error);
-    throw new Error(`Failed to load or parse plan \"${planName}\".`);
+    console.error(`Failed to load plan "${planName}":`, error);
+    throw new Error(`Failed to load or parse plan "${planName}".`);
   }
+
   const validationResult = recipePlanSchema.safeParse(fileContent);
   if (!validationResult.success) {
     throw new Error(
-      `Plan file \"${planName}.json\" is corrupted or has invalid format.`
+      `Plan file "${planName}.json" is corrupted or has invalid format.`
     );
   }
   return validationResult.data as unknown as PlanRecipe;
@@ -46,9 +52,12 @@ export const loadPlan = async (planName: string): Promise<PlanRecipe> => {
 export const listPlans = async (): Promise<string[]> => {
   try {
     const files = await fs.promises.readdir(STORAGE_PATH);
-    return files.map((file) => file.slice(0, -5));
+    return files
+      .filter((file) => file.endsWith('.json'))
+      .map((file) => file.replace('.json', ''));
   } catch (error: unknown) {
-    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+    const sysError = error as SystemError;
+    if (sysError.code === 'ENOENT') {
       return [];
     }
     console.error('Failed to list plans', error);
@@ -61,12 +70,13 @@ export const deletePlan = async (planName: string): Promise<void> => {
     const filePath = path.join(STORAGE_PATH, `${planName}.json`);
     await fs.promises.unlink(filePath);
   } catch (error: unknown) {
-    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
-      throw new Error(`Plan with name \"${planName}\" does not exist.`);
+    const sysError = error as SystemError;
+    if (sysError.code === 'ENOENT') {
+      throw new Error(`Plan with name "${planName}" does not exist.`);
     }
-    console.error(`Failed to delete plan \"${planName}\":`, error);
+    console.error(`Failed to delete plan "${planName}":`, error);
     throw new Error(
-      `An unexpected error occurred while deleting plan \"${planName}\".`
+      `An unexpected error occurred while deleting plan "${planName}".`
     );
   }
 };
@@ -76,11 +86,7 @@ export const planExists = async (planName: string): Promise<boolean> => {
   try {
     await fs.promises.access(filePath);
     return true;
-  } catch (error: unknown) {
-    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
-      return false;
-    }
-    console.error(`Error checking if plan \"${planName}\" exists:`, error);
-    throw error;
+  } catch (_error) {
+    return false;
   }
 };
