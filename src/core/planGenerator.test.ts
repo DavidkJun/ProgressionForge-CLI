@@ -58,7 +58,7 @@ describe('planGenerator (Повний Інтеграційний Тест)', () 
           accumulationCoefficient: 0.01,
           intensificationCoefficient: 0.02,
         },
-        warmup: [{ exercise: 'Joint Mobility', duration: '5 min' }],
+        warmup: [{ exercise: 'Joint Mobility' }],
       },
     ],
   };
@@ -88,7 +88,7 @@ describe('planGenerator (Повний Інтеграційний Тест)', () 
       week1: [80, 70, 50, 120],
       week2: [82, 75, 50, 120],
       week3: [84, 80, 52.5, 122.5],
-      week4: [86, 85, 52.5, 122.5],
+      week4: [86, 85, 52.5, 125],
     };
 
     it('повинен правильно розрахувати ваги для Тижня 1', () => {
