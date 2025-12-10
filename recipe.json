@@ -1,0 +1,36 @@
+{
+  "planName": "Мій Перший План",
+  "durationWeeks": 4,
+  "bodyWeightKg": 80,
+  "exercises": [
+    {
+      "name": "Жим лежачи",
+      "type": "weight",
+      "sets": 3,
+      "reps": 5,
+      "startCoefficient": 1.0,
+      "progressionModel": "linear",
+      "progressionParams": {
+        "incrementCoefficient": 0.025
+      },
+      "warmup": [
+        { "weightKg": 40, "reps": 5 }
+      ]
+    },
+    {
+      "name": "Присідання",
+      "type": "weight",
+      "sets": 3,
+      "reps": 8,
+      "startCoefficient": 1.0,
+      "progressionModel": "percentage",
+      "progressionParams": {
+        "startPercent": 70,
+        "incrementPercent": 5
+      },
+      "warmup": [
+        { "weightKg": 50, "reps": 5 }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import { ProgressionParams } from '../progressions/index.js';
 
 export type WarmupStep =
-  | { exercise: string; duration?: string; sets?: number; reps?: number }
+  | { exercise: string; sets?: number; reps?: number }
   | { weightKg: number; reps: number };
 
 export interface ExerciseRecipe {

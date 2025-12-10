@@ -1,0 +1,112 @@
+{
+  "planName": "irorian",
+  "durationWeeks": 3,
+  "bodyWeightKg": 100,
+  "exercises": [
+    {
+      "name": "pull ups",
+      "type": "bodyweight",
+      "reps": 5,
+      "sets": 4,
+      "startCoefficient": 1,
+      "progressionModel": "linear",
+      "progressionParams": {
+        "incrementCoefficient": 0.03
+      },
+      "warmup": [
+        {
+          "exercise": "Scapular Pulls / Scapular Push-ups",
+          "sets": 2,
+          "reps": 10
+        },
+        {
+          "exercise": "Band Pull-Aparts",
+          "sets": 2,
+          "reps": 15
+        }
+      ]
+    },
+    {
+      "name": "squat",
+      "type": "weight",
+      "reps": 6,
+      "sets": 4,
+      "startCoefficient": 1,
+      "progressionModel": "percentage",
+      "progressionParams": {
+        "startPercent": 80,
+        "incrementPercent": 5
+      },
+      "warmup": [
+        {
+          "weightKg": 40,
+          "reps": 4
+        }
+      ]
+    },
+    {
+      "name": "bench press",
+      "type": "weight",
+      "reps": 3,
+      "sets": 5,
+      "startCoefficient": 1,
+      "progressionModel": "wave",
+      "progressionParams": {
+        "weeksUp": 2,
+        "upCoefficient": 0.02,
+        "downCoefficient": 0.01
+      },
+      "warmup": [
+        {
+          "weightKg": 55,
+          "reps": 8
+        },
+        {
+          "weightKg": 62.5,
+          "reps": 6
+        },
+        {
+          "weightKg": 72.5,
+          "reps": 4
+        }
+      ]
+    },
+    {
+      "name": "kadsjfh",
+      "type": "weight",
+      "reps": 4,
+      "sets": 4,
+      "startCoefficient": 1,
+      "progressionModel": "block",
+      "progressionParams": {
+        "accumulationCoefficient": 0.05,
+        "intensificationCoefficient": 0.2,
+        "blockWeeks": 4
+      },
+      "warmup": [
+        {
+          "exercise": "ups",
+          "sets": 3,
+          "reps": 12
+        }
+      ]
+    },
+    {
+      "name": "d",
+      "type": "bodyweight",
+      "sets": 1,
+      "reps": 1,
+      "progressionModel": "linear",
+      "startCoefficient": 1,
+      "progressionParams": {
+        "incrementCoefficient": 0.09
+      },
+      "warmup": [
+        {
+          "weightKg": 1,
+          "reps": 1
+        }
+      ]
+    }
+  ]
+}

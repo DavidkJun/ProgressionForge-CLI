@@ -1,0 +1,75 @@
+{
+  "planName": "test",
+  "durationWeeks": 5,
+  "bodyWeightKg": 97,
+  "exercises": [
+    {
+      "name": "squats",
+      "type": "weight",
+      "sets": 4,
+      "reps": 6,
+      "progressionModel": "linear",
+      "startCoefficient": 100,
+      "progressionParams": {
+        "incrementCoefficient": 0.025
+      },
+      "warmup": [
+        {
+          "weightKg": 60,
+          "reps": 8
+        },
+        {
+          "weightKg": 70,
+          "reps": 6
+        },
+        {
+          "weightKg": 80,
+          "reps": 4
+        }
+      ]
+    },
+    {
+      "name": "pull ups",
+      "type": "bodyweight",
+      "sets": 6,
+      "reps": 7,
+      "progressionModel": "wave",
+      "startCoefficient": 1,
+      "progressionParams": {
+        "weeksUp": 2,
+        "upCoefficient": 0.02,
+        "downCoefficient": 0.01
+      },
+      "warmup": [
+        {
+          "exercise": "easy pull ups ",
+          "sets": 3,
+          "reps": 2
+        }
+      ]
+    },
+    {
+      "name": "bodyweight squats",
+      "type": "bodyweight",
+      "sets": 4,
+      "reps": 5,
+      "progressionModel": "linear",
+      "startCoefficient": 1.2,
+      "progressionParams": {
+        "incrementCoefficient": 0.03
+      },
+      "warmup": [
+        {
+          "exercise": "Bodyweight Squats (partial reps)",
+          "sets": 2,
+          "reps": 15
+        },
+        {
+          "exercise": "Knees circular swings",
+          "sets": 2,
+          "reps": 10
+        }
+      ]
+    }
+  ]
+}

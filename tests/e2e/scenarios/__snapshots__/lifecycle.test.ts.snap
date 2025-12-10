@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`E2E: Full Lifecycle (Happy Path) should generate the workout schedule 1`] = `
+"# 🏋️ Training Plan: e2e-test-plan
+**Duration:** 4 weeks
+
+---
+
+## 🗓️ Week 1
+
+### Squats
+* **Warm-up:**
+  * 20 kg × 10 reps
+> **Working Sets:** 5 sets × 5 reps @ **80 kg**
+
+---
+
+## 🗓️ Week 2
+
+### Squats
+* **Warm-up:**
+  * 20 kg × 10 reps
+> **Working Sets:** 5 sets × 5 reps @ **82.5 kg**
+
+---
+
+## 🗓️ Week 3
+
+### Squats
+* **Warm-up:**
+  * 20 kg × 10 reps
+> **Working Sets:** 5 sets × 5 reps @ **85 kg**
+
+---
+
+## 🗓️ Week 4
+
+### Squats
+* **Warm-up:**
+  * 20 kg × 10 reps
+> **Working Sets:** 5 sets × 5 reps @ **85 kg**
+
+---
+"
+`;

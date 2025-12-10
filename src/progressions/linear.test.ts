@@ -49,3 +49,27 @@ describe('linearProgression', () => {
     expect(linearProgression(data)).toEqual(expectedResult);
   });
 });
+
+describe('Randomized / Property Tests (Fuzzing)', () => {
+  it('should hold the mathematical property of linear growth for 100 random inputs', () => {
+    for (let i = 0; i < 100; i++) {
+      const initialWeight = Math.random() * 200 + 20;
+      const durationWeeks = Math.floor(Math.random() * 50) + 1;
+      const incrementCoefficient = Math.random() * 0.1;
+
+      const result = linearProgression({
+        initialWeight,
+        durationWeeks,
+        progressionParams: { incrementCoefficient },
+      });
+
+      expect(result).toHaveLength(durationWeeks);
+
+      const lastIndex = durationWeeks - 1;
+      const incrementValue = initialWeight * incrementCoefficient;
+      const expectedLastValue = initialWeight + incrementValue * lastIndex;
+
+      expect(result[lastIndex]).toBeCloseTo(expectedLastValue, 4);
+    }
+  });
+});

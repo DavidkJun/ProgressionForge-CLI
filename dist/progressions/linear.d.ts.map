@@ -1,0 +1,1 @@
+{"version":3,"file":"linear.d.ts","sourceRoot":"","sources":["../../src/progressions/linear.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,iBAAiB,GAAI,QAAQ,YAAY,KAAG,MAAM,EAW9D,CAAC;AAEF,MAAM,WAAW,YAAY;IAC3B,aAAa,EAAE,MAAM,CAAC;IACtB,aAAa,EAAE,MAAM,CAAC;IACtB,iBAAiB,EAAE,uBAAuB,CAAC;CAC5C;AAED,MAAM,WAAW,uBAAuB;IACtC,oBAAoB,EAAE,MAAM,CAAC;CAC9B"}

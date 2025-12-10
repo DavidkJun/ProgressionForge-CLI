@@ -141,3 +141,37 @@ describe('waveProgression', () => {
     expect(waveProgression(data)).toEqual(expectedResult);
   });
 });
+
+describe('Randomized Logic Checks', () => {
+  it('should strictly follow the UP/DOWN pattern', () => {
+    for (let i = 0; i < 100; i++) {
+      const initialWeight = 100;
+      const durationWeeks = Math.floor(Math.random() * 30) + 5;
+      const weeksUp = Math.floor(Math.random() * 4) + 1;
+      const upCoeff = 0.05;
+      const downCoeff = 0.025;
+
+      const result = waveProgression({
+        initialWeight,
+        durationWeeks,
+        progressionParams: {
+          weeksUp,
+          upCoefficient: upCoeff,
+          downCoefficient: downCoeff,
+        },
+      });
+
+      for (let w = 1; w < result.length; w++) {
+        const prevWeight = result[w - 1]!;
+        const currWeight = result[w]!;
+        const cyclePosition = w % (weeksUp + 1);
+
+        if (cyclePosition === 0) {
+          expect(currWeight).toBeLessThanOrEqual(prevWeight);
+        } else {
+          expect(currWeight).toBeGreaterThanOrEqual(prevWeight);
+        }
+      }
+    }
+  });
+});

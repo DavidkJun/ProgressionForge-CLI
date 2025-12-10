@@ -5,7 +5,6 @@ import { recipePlanSchema } from '../models/schema.js';
 
 const STORAGE_PATH = path.join(process.cwd(), 'plans');
 
-// Допоміжний тип для помилок файлової системи (NodeJS.ErrnoException)
 interface SystemError extends Error {
   code?: string;
 }
