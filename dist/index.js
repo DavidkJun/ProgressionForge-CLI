@@ -101,8 +101,10 @@ export const main = async () => {
             process.exit(1);
     }
 };
-main().catch((err) => {
-    console.error('Fatal Error:', err);
-    process.exit(1);
-});
+if (process.env.NODE_ENV !== 'test') {
+    main().catch((err) => {
+        console.error('Fatal Error:', err);
+        process.exit(1);
+    });
+}
 //# sourceMappingURL=index.js.map

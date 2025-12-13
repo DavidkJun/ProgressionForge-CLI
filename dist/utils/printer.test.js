@@ -1,3 +1,5 @@
+// @ts-nocheck
+import { jest } from '@jest/globals';
 import { printPlan } from './printer.js';
 describe('Printer Module', () => {
     let consoleOutput = [];

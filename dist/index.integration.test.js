@@ -1,3 +1,5 @@
+// @ts-nocheck
+import { jest } from '@jest/globals';
 import { main } from './index.js';
 import * as newCommand from './commands/new.js';
 import * as editCommand from './commands/edit.js';

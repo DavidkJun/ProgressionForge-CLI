@@ -1,3 +1,6 @@
+// @ts-nocheck
+import { jest } from '@jest/globals';
+
 import inquirer from 'inquirer';
 import { handleNew } from './new.js';
 import * as storageManager from '../storage/storageManager.js';

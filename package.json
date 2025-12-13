@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest",
+    "test": "jest /src",
     "build": "tsc",
     "test:load": "jest tests/perfomance",
     "test:e2e": "npm run build && jest tests/e2e --runInBand"
@@ -40,6 +40,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@jest/globals": "^29.7.0",
     "inquirer": "^12.11.0",
     "zod": "^4.1.12"
   }

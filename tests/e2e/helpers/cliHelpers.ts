@@ -27,7 +27,7 @@ export function runCLI(
     const child = spawn('node', [cliPath, ...args], {
       cwd,
       stdio: 'pipe',
-      env: { ...process.env, NODE_ENV: 'test' },
+      env: { ...process.env, NODE_ENV: 'prod' },
     });
 
     let stdout = '';

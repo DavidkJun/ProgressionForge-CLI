@@ -121,7 +121,9 @@ export const main = async () => {
   }
 };
 
-main().catch((err) => {
-  console.error('Fatal Error:', err);
-  process.exit(1);
-});
+if (process.env.NODE_ENV !== 'test') {
+  main().catch((err) => {
+    console.error('Fatal Error:', err);
+    process.exit(1);
+  });
+}
