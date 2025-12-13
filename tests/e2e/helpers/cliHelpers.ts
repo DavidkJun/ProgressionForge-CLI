@@ -21,7 +21,6 @@ export function runCLI(
   cwd: string = process.cwd()
 ): Promise<CliResult> {
   return new Promise((resolve) => {
-    // Шлях до скомпільованого файлу
     const cliPath = path.resolve(__dirname, '../../../dist/index.js');
 
     const child = spawn('node', [cliPath, ...args], {
@@ -47,7 +46,6 @@ export function runCLI(
     });
 
     const loopInputs = async () => {
-      // Чекаємо 4 секунди на повний старт (щоб Inquirer прокинувся)
       await new Promise((r) => setTimeout(r, 4000));
 
       for (const input of inputs) {
@@ -59,15 +57,12 @@ export function runCLI(
           ) {
             child.stdin.write(input);
           } else {
-            // Для тексту додаємо Enter
             child.stdin.write(input + KEY_CODES.ENTER);
           }
         }
-        // Пауза 2 секунди між діями
         await new Promise((r) => setTimeout(r, 2000));
       }
 
-      // Даємо час на обробку останньої команди
       await new Promise((r) => setTimeout(r, 1000));
       if (child.stdin) {
         child.stdin.end();
