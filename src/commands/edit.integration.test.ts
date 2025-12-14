@@ -75,9 +75,20 @@ describe('Command: edit (Integration)', () => {
       .mockResolvedValueOnce({
         mainAction: 'Edit Plan Details (Duration, Bodyweight)',
       })
-      .mockResolvedValueOnce({
-        durationWeeks: 8,
-        bodyWeightKg: 85,
+      .mockImplementationOnce(async (questions) => {
+        const qs = Array.isArray(questions) ? questions : [questions];
+        const bwQuestion = qs.find((q: any) => q.name === 'bodyWeightKg');
+
+        const rawWeight = '85';
+
+        const finalWeight = bwQuestion.filter
+          ? bwQuestion.filter(rawWeight)
+          : rawWeight;
+
+        return {
+          durationWeeks: 8,
+          bodyWeightKg: finalWeight,
+        };
       })
       .mockResolvedValueOnce({
         mainAction: 'Save & Exit',
@@ -117,8 +128,14 @@ describe('Command: edit (Integration)', () => {
       .mockResolvedValueOnce({
         action: 'Edit Start Coefficient',
       })
-      .mockResolvedValueOnce({
-        newCoeff: 110,
+      .mockImplementationOnce(async (questions) => {
+        const q = Array.isArray(questions) ? questions[0] : questions;
+
+        const rawInput = '110';
+
+        const val = q.filter ? q.filter(rawInput) : rawInput;
+
+        return { newCoeff: val };
       })
       .mockResolvedValueOnce({
         action: 'Back to Exercises List',
