@@ -16,39 +16,32 @@ describe('E2E: Full Lifecycle (Happy Path)', () => {
       fs.rmSync(TEST_DIR, { recursive: true, force: true });
   });
 
-  // ТЕСТ 1: Створення
   test('should create a new plan via "new" command', async () => {
     const inputs = [
-      '4', // Duration
-      '80', // Bodyweight
+      '4',
+      '80',
 
-      // -- Exercise --
-      'Squats', // Name
-      KEY_CODES.ENTER, // Type: Bodyweight (Default)
-      '5', // Sets
-      '5', // Reps
+      'Squats',
+      KEY_CODES.ENTER,
+      '5',
+      '5',
 
-      KEY_CODES.ENTER, // Progression: Linear (Default)
-      '1', // Start Coeff
-      '0.025', // Increment (2.5%)
+      KEY_CODES.ENTER,
+      '1',
+      '0.025',
 
-      KEY_CODES.ENTER, // Movement Type: Upper Body (Default)
-
-      // -- Warmup (Custom) --
-      // Просто тиснемо ENTER. Перший пункт - "Custom".
       KEY_CODES.ENTER,
 
-      // Select step type "Weight-based" (Default)
       KEY_CODES.ENTER,
 
-      // Вводимо цифри. Програма буде їх чекати.
-      '20', // Warmup Weight
-      '10', // Warmup Reps
+      KEY_CODES.ENTER,
 
-      'n', // Add another warmup step? -> NO
+      '20',
+      '10',
 
-      // -- Exercise Loop End --
-      'n', // Add another exercise? -> NO
+      'n',
+
+      'n',
     ];
 
     const result = await runCLI(['new', PLAN_NAME], inputs, TEST_DIR);
@@ -65,30 +58,24 @@ describe('E2E: Full Lifecycle (Happy Path)', () => {
     expect(fileContent.planName).toBe(PLAN_NAME);
   }, 90000);
 
-  // ТЕСТ 2: Перегляд списку
   test('should verify the plan appears in "list"', async () => {
     const result = await runCLI(['list'], [], TEST_DIR);
     expect(result.code).toBe(0);
     expect(result.stdout).toContain(PLAN_NAME);
   });
 
-  // ТЕСТ 3: Генерація
   test('should generate the workout schedule', async () => {
     const result = await runCLI(['generate', PLAN_NAME], [], TEST_DIR);
 
     expect(result.code).toBe(0);
     expect(result.stdout.length).toBeGreaterThan(0);
 
-    // Снепшот збереже результат.
-    // Якщо тест впаде, запустіть з прапорцем -u
     expect(result.stdout).toMatchSnapshot();
   });
 
-  // ТЕСТ 4: Видалення
   test('should delete the plan', async () => {
     expect(fs.existsSync(PLAN_FILE)).toBe(true);
 
-    // 'y' для підтвердження (якщо його немає в коді, це не зашкодить)
     const inputs = ['y'];
     const result = await runCLI(['delete', PLAN_NAME], inputs, TEST_DIR);
 

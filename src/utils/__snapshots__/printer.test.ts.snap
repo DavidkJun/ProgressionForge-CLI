@@ -1,48 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Printer (Snapshot Testing) should match the exact visual structure (Markdown format) 1`] = `
-"========================================
-PLAN: Comprehensive Test Plan
-Duration: 2 weeks
-========================================
-
---- Week 1 ---
-  **Bench Press (3 x 5 @ 100 kg)**
-    Warmup: 50 kg x 5 reps
-    Warmup: Rotator Cuffs 
-
---- Week 2 ---
-  **Squat (5 x 5 @ 120 kg)**
-    Warmup: Goblet Squat 2 sets x 8 reps
-  **Pull Ups (4 x 8 @ 90 kg)**
-    Warmup: Scapular Pulls x 10 reps
-========================================
-PLAN: Comprehensive Test Plan
-Duration: 1 weeks
-========================================
-
---- Week 1 ---
-  **Deadlift (1 x 5 @ 150 kg)**
-========================================
-PLAN: Comprehensive Test Plan
-Duration: 0 weeks
-========================================
-========================================
-PLAN: Comprehensive Test Plan
-Duration: 1 weeks
-========================================
-
---- Week 1 ---
-========================================
-PLAN: Comprehensive Test Plan
-Duration: 1 weeks
-========================================
-
---- Week 1 ---
-  **Squat (3 x 5 @ 100 kg)**
-    Warmup: Box Jumps 3 sets x 5 reps"
-`;
-
 exports[`Printer Module Snapshot Test should match the exact visual structure 1`] = `
 "# 🏋️ Training Plan: Test Plan
 **Duration:** 2 weeks

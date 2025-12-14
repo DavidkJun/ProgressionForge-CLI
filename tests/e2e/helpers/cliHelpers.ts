@@ -9,7 +9,6 @@ export interface CliResult {
 }
 
 export const KEY_CODES = {
-  // Використовуємо \n, це стабільно працює для Inquirer + spawn
   ENTER: '\n',
   DOWN: '\x1B\x5B\x42',
   UP: '\x1B\x5B\x41',
